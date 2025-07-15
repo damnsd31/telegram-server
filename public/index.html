@@ -1,106 +1,188 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Арбитражный помощник</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Кошелёк</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
-      --bg-color: var(--tg-theme-bg-color, #ffffff);
-      --text-color: var(--tg-theme-text-color, #000000);
-      --secondary-bg: var(--tg-theme-secondary-bg-color, #f5f5f5);
-      --button-color: var(--tg-theme-button-color, #3390ec);
-      --button-text: var(--tg-theme-button-text-color, #ffffff);
-    }
-
-    * {
-      box-sizing: border-box;
+      --bg-color: #1c1c1e;
+      --text-color: #fff;
+      --card-bg: #2c2c2e;
+      --accent-color: #007aff;
+      --gray-text: #9e9e9e;
     }
 
     body {
       margin: 0;
-      padding: 16px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: var(--bg-color);
+      padding: 0;
+      background: var(--bg-color);
       color: var(--text-color);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
-    .card {
-      background: var(--secondary-bg);
-      border-radius: 16px;
+    .container {
       padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
 
-    h1 {
-      font-size: 22px;
-      margin-bottom: 8px;
-    }
-
-    p {
-      margin: 0 0 12px;
-      font-size: 16px;
-    }
-
-    .button {
-      display: block;
-      width: 100%;
-      font-size: 18px;
-      padding: 14px;
-      border-radius: 12px;
-      background: var(--button-color);
-      color: var(--button-text);
+    .balance {
       text-align: center;
-      text-decoration: none;
-      border: none;
+      font-size: 36px;
       margin-top: 12px;
-      cursor: pointer;
     }
 
-    .nav {
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+
+    .action-button {
+      background: #333;
+      border: none;
+      border-radius: 12px;
+      padding: 12px;
+      width: 70px;
+      text-align: center;
+      color: var(--text-color);
+      font-size: 12px;
+    }
+
+    .banner {
+      background: linear-gradient(45deg, #34d2c3, #1aa7ec);
+      color: #fff;
+      border-radius: 12px;
+      padding: 12px;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+
+    .currency-list {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .currency {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #444;
+    }
+
+    .currency:last-child {
+      border-bottom: none;
+    }
+
+    .currency-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .currency-info {
+      text-align: right;
+    }
+
+    .currency-info .price {
+      font-weight: bold;
+    }
+
+    .trend-up {
+      color: #00d97e;
+    }
+
+    .trend-down {
+      color: #ff4d4d;
+    }
+
+    .bottom-nav {
       position: fixed;
       bottom: 0;
       left: 0;
-      right: 0;
-      background: var(--secondary-bg);
+      width: 100%;
       display: flex;
       justify-content: space-around;
-      padding: 10px;
-      border-top: 1px solid rgba(0,0,0,0.1);
+      background: var(--card-bg);
+      padding: 8px 0;
+      border-top: 1px solid #444;
     }
 
-    .nav button {
-      flex: 1;
+    .bottom-nav button {
       background: none;
       border: none;
-      color: var(--text-color);
-      font-size: 14px;
-      padding: 10px;
+      color: var(--gray-text);
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Добро пожаловать!</h1>
-    <p>Это мини-приложение для юристов по банкротству.</p>
-    <button class="button" onclick="alert('Заглушка: скоро будет список дел')">Мои дела</button>
-    <button class="button" onclick="alert('Заглушка: скоро будет календарь')">Календарь</button>
-    <button class="button" onclick="alert('Заглушка: скоро будут задачи')">Задачи</button>
+  <div class="container">
+    <h2 style="text-align: center">Баланс</h2>
+    <div class="balance">0,00 $</div>
+
+    <div class="actions">
+      <button class="action-button" onclick="alert('Заглушка')">⬆️<br>Отправить</button>
+      <button class="action-button" onclick="alert('Заглушка')">➕<br>Пополнить</button>
+      <button class="action-button" onclick="alert('Заглушка')">🔄<br>Обменять</button>
+      <button class="action-button" onclick="alert('Заглушка')">🏪<br>P2P</button>
+    </div>
+
+    <div class="banner">
+      Зарабатывайте до 15% годовых на долларах →
+    </div>
+
+    <div class="currency-list">
+      <div class="currency">
+        <div class="currency-name">💵 Доллары</div>
+        <div class="currency-info">
+          <div class="price">0,00 $</div>
+          <div>0 USDT</div>
+        </div>
+      </div>
+      <div class="currency">
+        <div class="currency-name">🔷 Toncoin</div>
+        <div class="currency-info">
+          <div class="price">3,02 $</div>
+          <div class="trend-down">▼ 0,02%</div>
+        </div>
+      </div>
+      <div class="currency">
+        <div class="currency-name">🟠 Bitcoin</div>
+        <div class="currency-info">
+          <div class="price">117 403,99 $</div>
+          <div class="trend-down">▼ 2,26%</div>
+        </div>
+      </div>
+      <div class="currency">
+        <div class="currency-name">🔮 Ethereum</div>
+        <div class="currency-info">
+          <div class="price">3 075,93 $</div>
+          <div class="trend-up">▲ 2,13%</div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="nav">
-    <button onclick="alert('Профиль')">Профиль</button>
-    <button onclick="alert('Главная')">Главная</button>
-    <button onclick="alert('Настройки')">Настройки</button>
+  <div class="bottom-nav">
+    <button onclick="alert('Заглушка')">💼<div>Кошелёк</div></button>
+    <button onclick="alert('Заглушка')">📊<div>Обмен</div></button>
+    <button onclick="alert('Заглушка')">🎁<div>Бонусы</div></button>
+    <button onclick="alert('Заглушка')">🕓<div>История</div></button>
   </div>
 
   <script>
     const tg = window.Telegram.WebApp;
     tg.ready();
-    document.body.style.backgroundColor = tg.themeParams.bg_color || '#fff';
-    document.body.style.color = tg.themeParams.text_color || '#000';
+    document.body.style.backgroundColor = tg.themeParams.bg_color || '#1c1c1e';
+    document.body.style.color = tg.themeParams.text_color || '#ffffff';
   </script>
 </body>
 </html>
