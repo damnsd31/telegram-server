@@ -2,27 +2,105 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Арбитражный помощник</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Арбитражный помощник</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
+    :root {
+      --bg-color: var(--tg-theme-bg-color, #ffffff);
+      --text-color: var(--tg-theme-text-color, #000000);
+      --secondary-bg: var(--tg-theme-secondary-bg-color, #f5f5f5);
+      --button-color: var(--tg-theme-button-color, #3390ec);
+      --button-text: var(--tg-theme-button-text-color, #ffffff);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: sans-serif;
-      padding: 20px;
+      margin: 0;
+      padding: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
     }
+
+    .card {
+      background: var(--secondary-bg);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
     h1 {
-      font-size: 24px;
+      font-size: 22px;
+      margin-bottom: 8px;
     }
-    button {
+
+    p {
+      margin: 0 0 12px;
+      font-size: 16px;
+    }
+
+    .button {
+      display: block;
+      width: 100%;
       font-size: 18px;
+      padding: 14px;
+      border-radius: 12px;
+      background: var(--button-color);
+      color: var(--button-text);
+      text-align: center;
+      text-decoration: none;
+      border: none;
+      margin-top: 12px;
+      cursor: pointer;
+    }
+
+    .nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--secondary-bg);
+      display: flex;
+      justify-content: space-around;
       padding: 10px;
-      margin-top: 20px;
+      border-top: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .nav button {
+      flex: 1;
+      background: none;
+      border: none;
+      color: var(--text-color);
+      font-size: 14px;
+      padding: 10px;
     }
   </style>
 </head>
 <body>
-  <h1>Добро пожаловать!</h1>
-  <p>Это мини-приложение для юристов по банкротству.</p>
-  <button onclick="alert('Скоро здесь будет список дел')">Мои дела</button>
+  <div class="card">
+    <h1>Добро пожаловать!</h1>
+    <p>Это мини-приложение для юристов по банкротству.</p>
+    <button class="button" onclick="alert('Заглушка: скоро будет список дел')">Мои дела</button>
+    <button class="button" onclick="alert('Заглушка: скоро будет календарь')">Календарь</button>
+    <button class="button" onclick="alert('Заглушка: скоро будут задачи')">Задачи</button>
+  </div>
+
+  <div class="nav">
+    <button onclick="alert('Профиль')">Профиль</button>
+    <button onclick="alert('Главная')">Главная</button>
+    <button onclick="alert('Настройки')">Настройки</button>
+  </div>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    document.body.style.backgroundColor = tg.themeParams.bg_color || '#fff';
+    document.body.style.color = tg.themeParams.text_color || '#000';
+  </script>
 </body>
 </html>
