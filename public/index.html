@@ -23,6 +23,12 @@
       color: #fff;
       padding-bottom: 120px;
     }
+    .screen {
+      display: none;
+    }
+    .screen.active {
+      display: block;
+    }
     header {
       padding: 16px;
       text-align: center;
@@ -117,66 +123,81 @@
   </style>
 </head>
 <body>
-  <header>
-    <h1>Баланс</h1>
-    <div class="balance">0,00 $</div>
-  </header>
+  <div class="screen active" id="screen-wallet">
+    <header>
+      <h1>Баланс</h1>
+      <div class="balance">0,00 $</div>
+    </header>
 
-  <div class="button-row">
-    <button>↑</button>
-    <button>＋</button>
-    <button>↔</button>
-    <button>🏪</button>
+    <div class="button-row">
+      <button>↑</button>
+      <button>＋</button>
+      <button>↔</button>
+      <button>🏪</button>
+    </div>
+
+    <div class="banner">
+      Зарабатывайте до 15% годовых на долларах. Начать зарабатывать &gt;
+    </div>
+
+    <div class="section-title">
+      <span style="opacity: 0.6">Задачи</span>
+      <button onclick="alert('Заглушка для Все')">Все</button>
+    </div>
+    <div class="list">
+      <div class="list-item"><span>Доллары</span><span>0,00 $</span></div>
+      <div class="list-item"><span>Toncoin</span><span>0,00 $</span></div>
+      <div class="list-item"><span>Bitcoin</span><span>0,00 $</span></div>
+      <div class="list-item"><span>Ethereum</span><span>0,00 $</span></div>
+      <div class="list-item"><span>Litecoin</span><span>0,00 $</span></div>
+      <div class="list-item"><span>Monero</span><span>0,00 $</span></div>
+    </div>
+
+    <div class="section-title">
+      <span style="opacity: 0.6">Дела</span>
+      <button onclick="alert('Заглушка для Все')">Все</button>
+    </div>
+    <div class="list">
+      <div class="list-item"><span>Доллары</span><span>0,00 $</span></div>
+      <div class="list-item"><span>Toncoin</span><span>0,00 $</span></div>
+      <div class="list-item"><span>Bitcoin</span><span>0,00 $</span></div>
+      <div class="list-item"><span>Ethereum</span><span>0,00 $</span></div>
+      <div class="list-item"><span>Litecoin</span><span>0,00 $</span></div>
+      <div class="list-item"><span>Monero</span><span>0,00 $</span></div>
+    </div>
+
+    <div class="section-title">
+      <span style="opacity: 0.6">Заседания</span>
+      <button onclick="alert('Заглушка для Все')">Все</button>
+    </div>
+    <div class="list">
+      <div class="list-item"><span>Доллары</span><span>0,00 $</span></div>
+      <div class="list-item"><span>Toncoin</span><span>0,00 $</span></div>
+      <div class="list-item"><span>Bitcoin</span><span>0,00 $</span></div>
+      <div class="list-item"><span>Ethereum</span><span>0,00 $</span></div>
+      <div class="list-item"><span>Litecoin</span><span>0,00 $</span></div>
+      <div class="list-item"><span>Monero</span><span>0,00 $</span></div>
+    </div>
   </div>
 
-  <div class="banner">
-    Зарабатывайте до 15% годовых на долларах. Начать зарабатывать &gt;
-  </div>
-
-  <div class="section-title">
-    <span style="opacity: 0.6">Задачи</span>
-    <button onclick="alert('Заглушка для Все')">Все</button>
-  </div>
-  <div class="list">
-    <div class="list-item"><span>Доллары</span><span>0,00 $</span></div>
-    <div class="list-item"><span>Toncoin</span><span>0,00 $</span></div>
-    <div class="list-item"><span>Bitcoin</span><span>0,00 $</span></div>
-    <div class="list-item"><span>Ethereum</span><span>0,00 $</span></div>
-    <div class="list-item"><span>Litecoin</span><span>0,00 $</span></div>
-    <div class="list-item"><span>Monero</span><span>0,00 $</span></div>
-  </div>
-
-  <div class="section-title">
-    <span style="opacity: 0.6">Дела</span>
-    <button onclick="alert('Заглушка для Все')">Все</button>
-  </div>
-  <div class="list">
-    <div class="list-item"><span>Доллары</span><span>0,00 $</span></div>
-    <div class="list-item"><span>Toncoin</span><span>0,00 $</span></div>
-    <div class="list-item"><span>Bitcoin</span><span>0,00 $</span></div>
-    <div class="list-item"><span>Ethereum</span><span>0,00 $</span></div>
-    <div class="list-item"><span>Litecoin</span><span>0,00 $</span></div>
-    <div class="list-item"><span>Monero</span><span>0,00 $</span></div>
-  </div>
-
-  <div class="section-title">
-    <span style="opacity: 0.6">Заседания</span>
-    <button onclick="alert('Заглушка для Все')">Все</button>
-  </div>
-  <div class="list">
-    <div class="list-item"><span>Доллары</span><span>0,00 $</span></div>
-    <div class="list-item"><span>Toncoin</span><span>0,00 $</span></div>
-    <div class="list-item"><span>Bitcoin</span><span>0,00 $</span></div>
-    <div class="list-item"><span>Ethereum</span><span>0,00 $</span></div>
-    <div class="list-item"><span>Litecoin</span><span>0,00 $</span></div>
-    <div class="list-item"><span>Monero</span><span>0,00 $</span></div>
-  </div>
+  <div class="screen" id="screen-analytics"></div>
+  <div class="screen" id="screen-rewards"></div>
+  <div class="screen" id="screen-history"></div>
 
   <div class="bottom-nav">
-    <button>👛</button>
-    <button>📈</button>
-    <button>🎁</button>
-    <button>🕒</button>
+    <button onclick="showScreen('screen-wallet')">👛</button>
+    <button onclick="showScreen('screen-analytics')">📈</button>
+    <button onclick="showScreen('screen-rewards')">🎁</button>
+    <button onclick="showScreen('screen-history')">🕒</button>
   </div>
+
+  <script>
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+      document.getElementById(id).classList.add('active');
+    }
+  </script>
 </body>
 </html>
