@@ -1,53 +1,169 @@
-<script>
-  const cases = [];
-
-  function normalize(text) {
-    return text.toLowerCase().replace(/[^а-яa-z0-9]/gi, '');
-  }
-
-  function renderCases(filter = '') {
-    const container = document.getElementById('case-list');
-    if (!container) return;
-    container.innerHTML = '';
-    const normalized = normalize(filter);
-    const filtered = cases.filter(c =>
-      normalize(c.name).includes(normalized) ||
-      normalize(c.number).includes(normalized)
-    );
-    if (filtered.length === 0) {
-      container.innerHTML = '<div style="text-align:center; opacity:0.6;">Нет дел</div>';
-    } else {
-      filtered.forEach(c => {
-        const el = document.createElement('div');
-        el.className = 'list-item';
-        el.innerHTML = `<span>${c.name}</span><span>${c.number}</span>`;
-        container.appendChild(el);
-      });
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Арбитражный помощник</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
     }
-  }
+    html, body {
+      -webkit-touch-callout: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen;
+      background-color: #1c1c1e;
+      color: #fff;
+      padding-bottom: 120px;
+    }
+    .screen {
+      display: none;
+    }
+    .screen.active {
+      display: block;
+    }
+    header {
+      padding: 16px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+    .list {
+      background-color: #2c2c2e;
+      margin: 16px;
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #3a3a3c;
+    }
+    .list-item:last-child {
+      border-bottom: none;
+    }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #2c2c2e;
+      display: flex;
+      justify-content: space-around;
+      padding: 20px 0;
+      border-top: 1px solid #3a3a3c;
+      z-index: 100;
+    }
+    .bottom-nav button {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 36px;
+    }
+  </style>
+</head>
+<body>
+  <div class="screen" id="screen-analytics">
+    <header>
+      <h1>Дела</h1>
+    </header>
 
-  document.getElementById('search-input').addEventListener('input', (e) => {
-    renderCases(e.target.value);
-  });
+    <div style="padding: 0 16px; margin-top: 8px; display: flex; gap: 12px;">
+      <div style="flex: 1; position: relative;">
+        <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.6); font-size: 18px;">🔍</span>
+        <input id="search-input" type="text" placeholder="Поиск" style="width: 100%; padding: 12px 12px 12px 36px; border: none; border-radius: 12px; background-color: #2c2c2e; color: white; font-size: 16px;">
+      </div>
+      <button onclick="openAddCaseModal()" style="background-color: #2c2c2e; color: #0a84ff; border: none; border-radius: 12px; padding: 12px 16px; font-size: 24px; height: 48px;">＋</button>
+    </div>
 
-  function openAddCaseModal() {
-    document.getElementById('add-case-modal').style.display = 'flex';
-  }
+    <div id="case-list" class="list" style="margin-top: 16px;"></div>
 
-  function closeAddCaseModal() {
-    document.getElementById('add-case-modal').style.display = 'none';
-    document.getElementById('case-name').value = '';
-    document.getElementById('case-number').value = '';
-  }
+    <div id="add-case-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 999; align-items: center; justify-content: center;">
+      <div style="background-color: #2c2c2e; border-radius: 16px; padding: 24px; width: 90%; max-width: 400px; color: white;">
+        <h2 style="margin-bottom: 12px;">Новое дело</h2>
+        <input id="case-name" placeholder="Название должника" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: none; background: #3a3a3c; color: white;" />
+        <input id="case-number" placeholder="Номер дела" style="width: 100%; margin-bottom: 16px; padding: 10px; border-radius: 8px; border: none; background: #3a3a3c; color: white;" />
+        <div style="text-align: right;">
+          <button onclick="closeAddCaseModal()" style="margin-right: 8px; background: none; border: none; color: #999;">Отмена</button>
+          <button onclick="addCase()" style="background: #0a84ff; color: white; border: none; padding: 8px 16px; border-radius: 10px;">Добавить</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  function addCase() {
-    const name = document.getElementById('case-name').value.trim();
-    const number = document.getElementById('case-number').value.trim();
-    if (!name || !number) return alert('Заполните оба поля');
-    cases.push({ name, number });
-    renderCases(document.getElementById('search-input').value);
-    closeAddCaseModal();
-  }
+  <div class="bottom-nav">
+    <button onclick="showScreen('screen-wallet')">👛</button>
+    <button onclick="showScreen('screen-analytics')">📈</button>
+    <button onclick="showScreen('screen-rewards')">🎁</button>
+    <button onclick="showScreen('screen-history')">🕒</button>
+  </div>
 
-  renderCases();
-</script>
+  <script>
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    const cases = [];
+
+    function normalize(text) {
+      return text.toLowerCase().replace(/[^а-яa-z0-9]/gi, '');
+    }
+
+    function renderCases(filter = '') {
+      const container = document.getElementById('case-list');
+      if (!container) return;
+      container.innerHTML = '';
+      const normalized = normalize(filter);
+      const filtered = cases.filter(c =>
+        normalize(c.name).includes(normalized) ||
+        normalize(c.number).includes(normalized)
+      );
+      if (filtered.length === 0) {
+        container.innerHTML = '<div style="text-align:center; opacity:0.6;">Нет дел</div>';
+      } else {
+        filtered.forEach(c => {
+          const el = document.createElement('div');
+          el.className = 'list-item';
+          el.innerHTML = `<span>${c.name}</span><span>${c.number}</span>`;
+          container.appendChild(el);
+        });
+      }
+    }
+
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      renderCases(e.target.value);
+    });
+
+    function openAddCaseModal() {
+      document.getElementById('add-case-modal').style.display = 'flex';
+    }
+
+    function closeAddCaseModal() {
+      document.getElementById('add-case-modal').style.display = 'none';
+      document.getElementById('case-name').value = '';
+      document.getElementById('case-number').value = '';
+    }
+
+    function addCase() {
+      const name = document.getElementById('case-name').value.trim();
+      const number = document.getElementById('case-number').value.trim();
+      if (!name || !number) return alert('Заполните оба поля');
+      cases.push({ name, number });
+      renderCases(document.getElementById('search-input').value);
+      closeAddCaseModal();
+    }
+
+    renderCases();
+  </script>
+</body>
+</html>
