@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Арбитражный помощник</title>
   <style>
     * {
@@ -120,24 +120,61 @@
       color: #fff;
       font-size: 36px;
     }
+    .search-container {
+      display: flex;
+      align-items: center;
+      background-color: #2c2c2e;
+      border-radius: 12px;
+      padding: 10px;
+    }
+    .search-container input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 16px;
+      padding-left: 8px;
+      outline: none;
+    }
+    .search-icon {
+      margin-right: 8px;
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    .plus-button {
+      background-color: #2c2c2e;
+      color: #0a84ff;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-size: 24px;
+    }
+    .case-list {
+      margin: 16px;
+    }
+    .case-item {
+      padding: 12px;
+      background-color: #2c2c2e;
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
   </style>
 </head>
 <body>
+  <!-- Вкладка 👛 -->
   <div class="screen active" id="screen-wallet">
     <header>
       <h1>Баланс</h1>
       <div class="balance">0,00 $</div>
     </header>
-
     <div class="button-row">
       <button>↑</button>
       <button>＋</button>
       <button>↔</button>
       <button>🏪</button>
     </div>
-
     <div class="banner">
-      Зарабатывайте до 15% годовых на долларах. Начать зарабатывать &gt;
+      Зарабатывайте до 15% годовых на долларах. Начать зарабатывать >
     </div>
 
     <div class="section-title">
@@ -180,31 +217,26 @@
     </div>
   </div>
 
+  <!-- Вкладка 📈 -->
   <div class="screen" id="screen-analytics">
-  <header>
-    <h1>Дела</h1>
-  </header>
-  <div style="padding: 0 16px; margin-top: 8px; display: flex; gap: 12px; align-items: stretch;">
-    <div style="flex: 1; position: relative;">
-      <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.6); font-size: 18px;">🔍</span>
-      <input id="search-input" type="text" placeholder="Поиск" style="width: 100%; padding: 12px 12px 12px 36px; border: none; border-radius: 12px; background-color: #2c2c2e; color: white; font-size: 16px; height: 48px;">
-    </div>
-    <button onclick="openAddCaseModal()" style="background-color: #2c2c2e; color: #0a84ff; border: none; border-radius: 12px; padding: 0 16px; font-size: 24px; height: 48px; display: flex; align-items: center; justify-content: center;">＋</button>
-  </div>
-  <div id="case-list" class="list" style="margin-top: 16px;"></div>
-  <div id="add-case-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 999; align-items: center; justify-content: center;">
-    <div style="background-color: #2c2c2e; border-radius: 16px; padding: 24px; width: 90%; max-width: 400px; color: white;">
-      <h2 style="margin-bottom: 12px;">Новое дело</h2>
-      <input id="case-name" placeholder="Название должника" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: none; background: #3a3a3c; color: white;" />
-      <input id="case-number" placeholder="Номер дела" style="width: 100%; margin-bottom: 16px; padding: 10px; border-radius: 8px; border: none; background: #3a3a3c; color: white;" />
-      <div style="text-align: right;">
-        <button onclick="closeAddCaseModal()" style="margin-right: 8px; background: none; border: none; color: #999;">Отмена</button>
-        <button onclick="addCase()" style="background: #0a84ff; color: white; border: none; padding: 8px 16px; border-radius: 10px;">Добавить</button>
+    <header>
+      <h1>Дела</h1>
+    </header>
+    <div style="display: flex; align-items: center; gap: 10px; margin: 16px;">
+      <div class="search-container" style="flex: 1; margin: 0;">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Поиск по делам" oninput="filterCases()">
       </div>
+      <button class="plus-button" onclick="addCase()" style="margin: 0; height: 44px;">＋</button>
     </div>
+    <div class="case-list" id="caseList"></div>
   </div>
-</div>
 
+  <!-- Пустые вкладки 🎁 и 🕒 -->
+  <div class="screen" id="screen-rewards"></div>
+  <div class="screen" id="screen-history"></div>
+
+  <!-- Нижняя панель -->
   <div class="bottom-nav">
     <button onclick="showScreen('screen-wallet')">👛</button>
     <button onclick="showScreen('screen-analytics')">📈</button>
@@ -213,62 +245,39 @@
   </div>
 
   <script>
+    let cases = [];
+
     function showScreen(id) {
-      document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
       document.getElementById(id).classList.add('active');
     }
 
-    const cases = [];
-
-    function normalize(text) {
-      return text.toLowerCase().replace(/[^а-яa-z0-9]/gi, '');
-    }
-
-    function renderCases(filter = '') {
-      const container = document.getElementById('case-list');
-      if (!container) return;
-      container.innerHTML = '';
-      const normalized = normalize(filter);
-      const filtered = cases.filter(c =>
-        normalize(c.name).includes(normalized) ||
-        normalize(c.number).includes(normalized)
-      );
-      if (filtered.length === 0) {
-        container.innerHTML = '<div style="text-align:center; opacity:0.6;">Нет дел</div>';
-      } else {
-        filtered.forEach(c => {
-          const el = document.createElement('div');
-          el.className = 'list-item';
-          el.innerHTML = `<span>${c.name}</span><span>${c.number}</span>`;
-          container.appendChild(el);
-        });
+    function addCase() {
+      const name = prompt(\"Введите название должника\");
+      const number = prompt(\"Введите номер дела\");
+      if (name && number) {
+        cases.push({ name, number });
+        renderCases();
       }
     }
 
-    document.getElementById('search-input')?.addEventListener('input', (e) => {
-      renderCases(e.target.value);
-    });
-
-    function openAddCaseModal() {
-      document.getElementById('add-case-modal').style.display = 'flex';
+    function renderCases() {
+      const list = document.getElementById(\"caseList\");
+      const filter = document.getElementById(\"searchInput\").value.toLowerCase();
+      list.innerHTML = \"\";
+      cases.filter(c => `${c.name} ${c.number}`.toLowerCase().includes(filter)).forEach(c => {
+        const el = document.createElement(\"div\");
+        el.className = \"case-item\";
+        el.innerText = `${c.name} — ${c.number}`;
+        list.appendChild(el);
+      });
     }
 
-    function closeAddCaseModal() {
-      document.getElementById('add-case-modal').style.display = 'none';
-      document.getElementById('case-name').value = '';
-      document.getElementById('case-number').value = '';
+    function filterCases() {
+      renderCases();
     }
-
-    function addCase() {
-      const name = document.getElementById('case-name').value.trim();
-      const number = document.getElementById('case-number').value.trim();
-      if (!name || !number) return alert('Заполните оба поля');
-      cases.push({ name, number });
-      renderCases(document.getElementById('search-input').value);
-      closeAddCaseModal();
-    }
-
-    renderCases();
   </script>
 </body>
 </html>
