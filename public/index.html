@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Арбитражный помощник</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     * {
       margin: 0;
@@ -162,6 +163,16 @@
       background-color: #2c2c2e;
       border-radius: 10px;
       margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .case-menu-button {
+      background: none;
+      border: none;
+      color: #0a84ff;
+      font-size: 24px;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -243,6 +254,8 @@
   </div>
 
   <script>
+    window.Telegram.WebApp.ready();
+
     let cases = [];
 
     function showScreen(id) {
@@ -273,16 +286,47 @@
       }
     }
 
+    function openCaseMenu(index) {
+      const choice = prompt("Выберите действие:\n1. Задачи\n2. Изменить\n3. Удалить");
+      if (choice === "1") {
+        alert("Заглушка для задач");
+      } else if (choice === "2") {
+        const newName = prompt("Введите новое название должника", cases[index].name);
+        const newNumber = prompt("Введите новый номер дела", cases[index].number);
+        if (newName && newNumber) {
+          cases[index] = { name: newName, number: newNumber };
+          saveCasesToStorage();
+          renderCases();
+        }
+      } else if (choice === "3") {
+        if (confirm("Удалить это дело?")) {
+          cases.splice(index, 1);
+          saveCasesToStorage();
+          renderCases();
+        }
+      }
+    }
+
     function renderCases() {
       const list = document.getElementById("caseList");
       const filter = document.getElementById("searchInput").value.toLowerCase();
       list.innerHTML = "";
       cases
         .filter(c => `${c.name} ${c.number}`.toLowerCase().includes(filter))
-        .forEach(c => {
+        .forEach((c, index) => {
           const el = document.createElement("div");
           el.className = "case-item";
-          el.innerText = `${c.name} — ${c.number}`;
+
+          const span = document.createElement("span");
+          span.innerText = `${c.name} — ${c.number}`;
+
+          const menuBtn = document.createElement("button");
+          menuBtn.className = "case-menu-button";
+          menuBtn.innerText = "⋯";
+          menuBtn.onclick = () => openCaseMenu(index);
+
+          el.appendChild(span);
+          el.appendChild(menuBtn);
           list.appendChild(el);
         });
     }
