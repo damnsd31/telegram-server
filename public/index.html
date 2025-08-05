@@ -16,12 +16,16 @@
     html, body {
       -webkit-touch-callout: none;
       -webkit-tap-highlight-color: transparent;
+      height: 100%;
+      width: 100%;
     }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen;
       background-color: #1c1c1e;
       color: #fff;
       padding-bottom: 120px;
+      position: relative;
+      overflow-x: hidden;
     }
     .screen {
       display: none;
@@ -119,6 +123,7 @@
       border: none;
       color: #fff;
       font-size: 36px;
+      cursor: pointer;
     }
     .search-container {
       display: flex;
@@ -161,7 +166,6 @@
   </style>
 </head>
 <body>
-  <!-- Вкладка 👛 -->
   <div class="screen active" id="screen-wallet">
     <header>
       <h1>Баланс</h1>
@@ -176,7 +180,6 @@
     <div class="banner">
       Зарабатывайте до 15% годовых на долларах. Начать зарабатывать >
     </div>
-
     <div class="section-title">
       <span style="opacity: 0.6">Задачи</span>
       <button onclick="alert('Заглушка для Все')">Все</button>
@@ -189,7 +192,6 @@
       <div class="list-item"><span>Litecoin</span><span>0,00 $</span></div>
       <div class="list-item"><span>Monero</span><span>0,00 $</span></div>
     </div>
-
     <div class="section-title">
       <span style="opacity: 0.6">Дела</span>
       <button onclick="alert('Заглушка для Все')">Все</button>
@@ -202,7 +204,6 @@
       <div class="list-item"><span>Litecoin</span><span>0,00 $</span></div>
       <div class="list-item"><span>Monero</span><span>0,00 $</span></div>
     </div>
-
     <div class="section-title">
       <span style="opacity: 0.6">Заседания</span>
       <button onclick="alert('Заглушка для Все')">Все</button>
@@ -217,7 +218,6 @@
     </div>
   </div>
 
-  <!-- Вкладка 📈 -->
   <div class="screen" id="screen-analytics">
     <header>
       <h1>Дела</h1>
@@ -232,11 +232,9 @@
     <div class="case-list" id="caseList"></div>
   </div>
 
-  <!-- Пустые вкладки 🎁 и 🕒 -->
   <div class="screen" id="screen-rewards"></div>
   <div class="screen" id="screen-history"></div>
 
-  <!-- Нижняя панель -->
   <div class="bottom-nav">
     <button onclick="showScreen('screen-wallet')">👛</button>
     <button onclick="showScreen('screen-analytics')">📈</button>
@@ -254,30 +252,47 @@
       document.getElementById(id).classList.add('active');
     }
 
+    function saveCasesToStorage() {
+      localStorage.setItem('bankruptcyCases', JSON.stringify(cases));
+    }
+
+    function loadCasesFromStorage() {
+      const stored = localStorage.getItem('bankruptcyCases');
+      if (stored) {
+        cases = JSON.parse(stored);
+      }
+    }
+
     function addCase() {
-      const name = prompt(\"Введите название должника\");
-      const number = prompt(\"Введите номер дела\");
+      const name = prompt("Введите название должника");
+      const number = prompt("Введите номер дела");
       if (name && number) {
         cases.push({ name, number });
+        saveCasesToStorage();
         renderCases();
       }
     }
 
     function renderCases() {
-      const list = document.getElementById(\"caseList\");
-      const filter = document.getElementById(\"searchInput\").value.toLowerCase();
-      list.innerHTML = \"\";
-      cases.filter(c => `${c.name} ${c.number}`.toLowerCase().includes(filter)).forEach(c => {
-        const el = document.createElement(\"div\");
-        el.className = \"case-item\";
-        el.innerText = `${c.name} — ${c.number}`;
-        list.appendChild(el);
-      });
+      const list = document.getElementById("caseList");
+      const filter = document.getElementById("searchInput").value.toLowerCase();
+      list.innerHTML = "";
+      cases
+        .filter(c => `${c.name} ${c.number}`.toLowerCase().includes(filter))
+        .forEach(c => {
+          const el = document.createElement("div");
+          el.className = "case-item";
+          el.innerText = `${c.name} — ${c.number}`;
+          list.appendChild(el);
+        });
     }
 
     function filterCases() {
       renderCases();
     }
+
+    loadCasesFromStorage();
+    renderCases();
   </script>
 </body>
 </html>
