@@ -174,9 +174,35 @@
       font-size: 24px;
       cursor: pointer;
     }
+    .modal {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2c2c2e;
+      border-radius: 12px;
+      padding: 12px;
+      width: 80%;
+      z-index: 999;
+    }
+    .modal button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 18px;
+      text-align: left;
+      border-bottom: 1px solid #3a3a3c;
+    }
+    .modal button:last-child {
+      border-bottom: none;
+    }
   </style>
 </head>
 <body>
+  <!-- Вкладка 👛 -->
   <div class="screen active" id="screen-wallet">
     <header>
       <h1>Баланс</h1>
@@ -229,6 +255,7 @@
     </div>
   </div>
 
+  <!-- Вкладка 📈 -->
   <div class="screen" id="screen-analytics">
     <header>
       <h1>Дела</h1>
@@ -243,9 +270,13 @@
     <div class="case-list" id="caseList"></div>
   </div>
 
+  <!-- Вкладки 🎁 и 🕒 -->
   <div class="screen" id="screen-rewards"></div>
   <div class="screen" id="screen-history"></div>
 
+  <div id="caseModal" class="modal" style="display: none;"></div>
+
+  <!-- Нижняя панель -->
   <div class="bottom-nav">
     <button onclick="showScreen('screen-wallet')">👛</button>
     <button onclick="showScreen('screen-analytics')">📈</button>
@@ -255,7 +286,6 @@
 
   <script>
     window.Telegram.WebApp.ready();
-
     let cases = [];
 
     function showScreen(id) {
@@ -263,6 +293,7 @@
         screen.classList.remove('active');
       });
       document.getElementById(id).classList.add('active');
+      hideModal();
     }
 
     function saveCasesToStorage() {
@@ -287,23 +318,44 @@
     }
 
     function openCaseMenu(index) {
-      const choice = prompt("Выберите действие:\n1. Задачи\n2. Изменить\n3. Удалить");
-      if (choice === "1") {
-        alert("Заглушка для задач");
-      } else if (choice === "2") {
-        const newName = prompt("Введите новое название должника", cases[index].name);
-        const newNumber = prompt("Введите новый номер дела", cases[index].number);
-        if (newName && newNumber) {
-          cases[index] = { name: newName, number: newNumber };
-          saveCasesToStorage();
-          renderCases();
-        }
-      } else if (choice === "3") {
-        if (confirm("Удалить это дело?")) {
-          cases.splice(index, 1);
-          saveCasesToStorage();
-          renderCases();
-        }
+      const modal = document.getElementById("caseModal");
+      modal.innerHTML = "";
+      const actions = [
+        { label: "Задачи", handler: () => alert("Заглушка для задач") },
+        { label: "Изменить", handler: () => editCase(index) },
+        { label: "Удалить", handler: () => deleteCase(index) }
+      ];
+      actions.forEach(action => {
+        const btn = document.createElement("button");
+        btn.innerText = action.label;
+        btn.onclick = () => {
+          action.handler();
+          hideModal();
+        };
+        modal.appendChild(btn);
+      });
+      modal.style.display = "block";
+    }
+
+    function hideModal() {
+      document.getElementById("caseModal").style.display = "none";
+    }
+
+    function editCase(index) {
+      const newName = prompt("Введите новое название должника", cases[index].name);
+      const newNumber = prompt("Введите новый номер дела", cases[index].number);
+      if (newName && newNumber) {
+        cases[index] = { name: newName, number: newNumber };
+        saveCasesToStorage();
+        renderCases();
+      }
+    }
+
+    function deleteCase(index) {
+      if (confirm("Удалить это дело?")) {
+        cases.splice(index, 1);
+        saveCasesToStorage();
+        renderCases();
       }
     }
 
