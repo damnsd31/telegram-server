@@ -202,7 +202,6 @@
   </style>
 </head>
 <body>
-  <!-- Вкладка 👛 -->
   <div class="screen active" id="screen-wallet">
     <header>
       <h1>Баланс</h1>
@@ -255,7 +254,6 @@
     </div>
   </div>
 
-  <!-- Вкладка 📈 -->
   <div class="screen" id="screen-analytics">
     <header>
       <h1>Дела</h1>
@@ -270,13 +268,11 @@
     <div class="case-list" id="caseList"></div>
   </div>
 
-  <!-- Вкладки 🎁 и 🕒 -->
   <div class="screen" id="screen-rewards"></div>
   <div class="screen" id="screen-history"></div>
 
   <div id="caseModal" class="modal" style="display: none;"></div>
 
-  <!-- Нижняя панель -->
   <div class="bottom-nav">
     <button onclick="showScreen('screen-wallet')">👛</button>
     <button onclick="showScreen('screen-analytics')">📈</button>
@@ -322,6 +318,7 @@
       modal.innerHTML = "";
       const actions = [
         { label: "Задачи", handler: () => alert("Заглушка для задач") },
+        { label: "Заседания", handler: () => alert("Заглушка для заседаний") },
         { label: "Изменить", handler: () => editCase(index) },
         { label: "Удалить", handler: () => deleteCase(index) }
       ];
